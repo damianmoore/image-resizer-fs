@@ -1,4 +1,20 @@
 #!/usr/bin/python
+#
+# Copyright 2009, Josef Kyrian <josef.kyrian@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import fuse
 fuse.fuse_python_api = (0, 2)
@@ -86,7 +102,6 @@ class ImageResizerFS(fuse.Fuse):
 		main
 		"""
 		dbg.filename = self.log
-		dbg.log('Init complete.')
 		dbg.log('Root: %s', self.root)
 		dbg.log('Cache dir: %s', self.cache_dir)
 		if (not os.path.exists(self.cache_dir)):
@@ -95,6 +110,8 @@ class ImageResizerFS(fuse.Fuse):
 		self.width = int(self.width)
 		self.height = int(self.height)
 		dbg.log('Size: %sx%s', (self.width, self.height))
+		dbg.log('Init complete.')
+		
 		return fuse.Fuse.main(self, *a, **kw)
 	#enddef
 	
@@ -195,8 +212,9 @@ if __name__ == '__main__':
 	fs.parser.add_option(mountopt = "cache_dir", dest = "cache_dir", metavar = "PATH", default = "/tmp/imcache", help = "Cache dir")
 	fs.parser.add_option(mountopt = "width", dest = "width", metavar = " ", default = "800", help = "Width")
 	fs.parser.add_option(mountopt = "height", dest = "height", metavar = " ", default = "800", help = "Height")
-	fs.parse(values = fs, errex = 1)
-	fs.flags = 0
-	fs.multithreaded = 0
-	fs.main()
+	if (not fs.parse(values = fs, errex = 1).getmod('showhelp')):
+		fs.flags = 0
+		fs.multithreaded = 0
+		fs.main()
+	#endif
 #endif
