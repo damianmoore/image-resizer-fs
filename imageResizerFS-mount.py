@@ -210,8 +210,8 @@ if __name__ == '__main__':
 	fs.parser.add_option(mountopt = "root", dest = "root", metavar = "PATH", default = "/", help = "Root directory")
 	fs.parser.add_option(mountopt = "log", dest = "log", metavar = "PATH", default = "/tmp/imageResizerFS.log", help = "Log filename")
 	fs.parser.add_option(mountopt = "cache_dir", dest = "cache_dir", metavar = "PATH", default = "/tmp/imcache", help = "Cache dir")
-	fs.parser.add_option(mountopt = "width", dest = "width", metavar = " ", default = "800", help = "Width")
-	fs.parser.add_option(mountopt = "height", dest = "height", metavar = " ", default = "800", help = "Height")
+	fs.parser.add_option(mountopt = "width", dest = "width", metavar = " ", default = "1024", help = "Width")
+	fs.parser.add_option(mountopt = "height", dest = "height", metavar = " ", default = "768", help = "Height")
 	if (not fs.parse(values = fs, errex = 1).getmod('showhelp')):
 		fs.flags = 0
 		fs.multithreaded = 0
