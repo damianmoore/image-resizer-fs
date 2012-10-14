@@ -49,7 +49,7 @@ def isImage(path):
 #enddef
 
 
-def resizeImage(src, dest, width, height):
+def resizeImage(src, dest, width, height, quality):
 	"""
 	Resizes images
 	"""
@@ -59,7 +59,7 @@ def resizeImage(src, dest, width, height):
 		p = src.rfind('.')
 		if (p != -1):
 			ext = src[p + 1 : ].lower()
-			im.save(dest, {'jpg' : 'JPEG', 'jpeg' : 'JPEG', 'png' : 'PNG'}[ext], quality = 100)
+			im.save(dest, {'jpg' : 'JPEG', 'jpeg' : 'JPEG', 'png' : 'PNG'}[ext], quality = int(quality))
 		else:
 			raise Exception('Unknown extension')
 		#endif
@@ -171,7 +171,7 @@ class ImageResizerFS(fuse.Fuse):
 				
 				if (not os.path.exists(fname)):
 					dbg.log('Write thumbnail %s for path %s' % (fname, path))
-					resizeImage(self.root + path, fname, self.width, self.height)
+					resizeImage(self.root + path, fname, self.width, self.height, self.quality)
 				#endif
 				
 				self._openedFiles[path] = open(fname, 'rb')
@@ -212,6 +212,7 @@ if __name__ == '__main__':
 	fs.parser.add_option(mountopt = "cache_dir", dest = "cache_dir", metavar = "PATH", default = "/tmp/imcache", help = "Cache dir")
 	fs.parser.add_option(mountopt = "width", dest = "width", metavar = " ", default = "1024", help = "Width")
 	fs.parser.add_option(mountopt = "height", dest = "height", metavar = " ", default = "768", help = "Height")
+	fs.parser.add_option(mountopt = "quality", dest = "quality", metavar = " ", default = "85", help = "Quality")
 	if (not fs.parse(values = fs, errex = 1).getmod('showhelp')):
 		fs.flags = 0
 		fs.multithreaded = 0
